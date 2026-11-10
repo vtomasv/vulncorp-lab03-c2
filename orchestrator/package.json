@@ -1,0 +1,12 @@
+{
+  "name": "vulncorp-orchestrator",
+  "version": "3.0.0",
+  "description": "VulnCorp Lab 03 - Orchestrator: Syft + Grype + Dependency-Track desde un click",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

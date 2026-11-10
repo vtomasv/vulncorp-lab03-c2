@@ -1,0 +1,17 @@
+# Reportes y datos generados
+data/sbom/
+data/grype/
+data/.dtrack_key
+data/.login.json
+data/exfiltracion/*
+!data/exfiltracion/.gitkeep
+
+# Dependencias locales
+node_modules/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Entorno local
+.env

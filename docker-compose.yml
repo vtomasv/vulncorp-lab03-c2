@@ -1,0 +1,228 @@
+###############################################################################
+#  VulnCorp Lab 03 — De la Vulnerabilidad al C2 (Red Team Simulation)
+#  Curso MAR303 — Universidad Mayor — Profesor Tomás Vera — 2026
+#
+#  Este compose levanta:
+#    - OWASP Dependency-Track (análisis de SBOM, EPSS)
+#    - "PetaShop Inventory" = OWASP VulnerableApp (Command Injection + Upload)
+#    - Orchestrator API (Syft + Grype + carga a DTrack, invocado por el plugin)
+#    - noVNC Webtop (estación de trabajo del equipo en el navegador)
+#
+#  Mythic C2 NO corre aquí: lo instala el estudiante "Operador C2" en su
+#  propia máquina siguiendo docs/MYTHIC_SETUP.md (ver README, sección Mythic).
+#
+#  PUERTOS:
+#    - Dependency-Track Frontend: 8083
+#    - Dependency-Track API:      8084
+#    - VulnerableApp (víctima):   9090
+#    - Orchestrator API:          8086
+#    - noVNC Webtop (HTTP/HTTPS): 6080 / 6081
+#
+#  Compatible con: AMD64 (Intel/AMD) y ARM64 (Apple Silicon M1/M2/M3/M4)
+#
+#  VERSIONES VERIFICADAS CON SOPORTE MULTI-ARQUITECTURA:
+#    - dependencytrack/apiserver:4.14.1        (amd64 + arm64)
+#    - dependencytrack/frontend:4.14.1         (amd64 + arm64)
+#    - sasanlabs/owasp-vulnerableapp:2.2.57    (amd64 + arm64)
+#    - lscr.io/linuxserver/webtop:ubuntu-xfce  (amd64 + arm64)
+#    - anchore/syft + anchore/grype            (amd64 + arm64, vía docker.sock)
+###############################################################################
+
+services:
+
+  # =========================================================================
+  #  DEPENDENCY-TRACK — Plataforma de Análisis de SBOM (con EPSS)
+  # =========================================================================
+
+  # --- Dependency-Track API Server ---
+  # Motor principal que procesa SBOMs, analiza componentes y detecta
+  # vulnerabilidades conocidas cruzando con NVD, OSS Index y EPSS.
+  dtrack-apiserver:
+    image: dependencytrack/apiserver:4.14.1
+    container_name: vulncorp03-dtrack-api
+    hostname: dtrack-apiserver
+    environment:
+      # Reducir memoria para entorno de laboratorio
+      - EXTRA_JAVA_OPTIONS=-Xmx2g
+      # Habilitar CORS para el frontend y para el plugin de Chrome
+      - ALPINE_CORS_ENABLED=true
+      - ALPINE_CORS_ALLOW_ORIGIN=*
+      - ALPINE_CORS_ALLOW_METHODS=GET, POST, PUT, DELETE, OPTIONS
+      - ALPINE_CORS_ALLOW_HEADERS=Origin, Content-Type, Authorization, X-Requested-With, Content-Length, Accept, Origin, X-Api-Key, X-Total-Count, *
+      - ALPINE_CORS_EXPOSE_HEADERS=Origin, Content-Type, Authorization, X-Requested-With, Content-Length, Accept, Origin, X-Api-Key, X-Total-Count
+      - ALPINE_CORS_ALLOW_CREDENTIALS=true
+      - ALPINE_CORS_MAX_AGE=3600
+    deploy:
+      resources:
+        limits:
+          memory: 3g
+        reservations:
+          memory: 2g
+    ports:
+      - "8084:8080"
+    volumes:
+      - dtrack_data:/data
+    restart: unless-stopped
+    networks:
+      - red-gestion
+    labels:
+      vulncorp.lab: "03"
+      vulncorp.role: "sbom-analysis-platform"
+
+  # --- Dependency-Track Frontend ---
+  # Interfaz web para visualizar proyectos, componentes, vulnerabilidades,
+  # EPSS y políticas de la cadena de suministro de software.
+  dtrack-frontend:
+    image: dependencytrack/frontend:4.14.1
+    container_name: vulncorp03-dtrack-frontend
+    hostname: dtrack-frontend
+    environment:
+      - API_BASE_URL=http://localhost:8084
+    ports:
+      - "8083:8080"
+    depends_on:
+      - dtrack-apiserver
+    restart: unless-stopped
+    networks:
+      - red-gestion
+    labels:
+      vulncorp.lab: "03"
+      vulncorp.role: "sbom-analysis-frontend"
+
+  # =========================================================================
+  #  PETASHOP INVENTORY — La máquina víctima
+  #  Es OWASP VulnerableApp "disfrazado" como sistema interno de inventario
+  #  de PetaShop. Contiene los escenarios de Command Injection y File Upload
+  #  que los alumnos ya conocen. Dentro vive el archivo de evidencia que
+  #  deberán exfiltrar con Mythic.
+  # =========================================================================
+
+  vulnerable-app:
+    build:
+      context: ./vulnerable-app
+      dockerfile: Dockerfile
+    image: vulncorp03/petashop-inventory:latest
+    container_name: vulncorp03-petashop-inventory
+    hostname: petashop-inventory
+    ports:
+      # Host 9090 → portal de la víctima (landing + proxy hacia la app)
+      - "9090:9091"
+    restart: unless-stopped
+    networks:
+      - red-victima
+    labels:
+      vulncorp.lab: "03"
+      vulncorp.role: "vulnerable-target"
+      vulncorp.app: "PetaShop Inventory"
+
+  # =========================================================================
+  #  ORCHESTRATOR — Servicio invocado por el plugin de Chrome
+  #  Al hacer click en el panel "VulnCorp Orchestrator" (que solapa a
+  #  Dependency-Track), este servicio:
+  #    1. Corre Syft contra las imágenes de la infraestructura (SBOM)
+  #    2. Corre Grype contra los SBOMs (reporte de CVEs)
+  #    3. Sube los SBOMs a Dependency-Track vía REST API
+  #    4. Genera alertas de los bugs críticos: Command Injection y Upload
+  # =========================================================================
+
+  orchestrator:
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    image: vulncorp03/orchestrator:latest
+    container_name: vulncorp03-orchestrator
+    hostname: orchestrator
+    environment:
+      - ORCHESTRATOR_PORT=8080
+      - DTRACK_URL=http://dtrack-apiserver:8080
+      # Imágenes objetivo del escaneo (separadas por coma)
+      - SCAN_TARGET_IMAGES=vulncorp03/petashop-inventory:latest
+      - SCAN_PROJECT_NAME=PetaShop Inventory
+      - SCAN_PROJECT_VERSION=3.0.0
+      # Versión de grype verificada (v0.95.0 tiene un bug de migración de BD)
+      - GRYPE_IMAGE=anchore/grype:v0.121.3
+    ports:
+      - "8086:8080"
+    volumes:
+      # Acceso al daemon de Docker para lanzar syft/grype como contenedores
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Volumen compartido donde syft/grype dejan sus reportes
+      - scan_data:/data
+    depends_on:
+      - dtrack-apiserver
+    restart: unless-stopped
+    networks:
+      - red-gestion
+    labels:
+      vulncorp.lab: "03"
+      vulncorp.role: "scan-orchestrator"
+
+  # =========================================================================
+  #  NOVNC WEBTOP — Estación de trabajo del equipo (todo dentro del compose)
+  #  Escritorio Xfce + Chromium en el navegador, con:
+  #    - La extensión VulnCorp Orchestrator pre-cargada
+  #    - Acceso a Dependency-Track, VulnerableApp y Mythic
+  #    - Carpeta compartida ./data/exfiltracion en el Escritorio
+  # =========================================================================
+
+  webtop:
+    image: lscr.io/linuxserver/webtop:ubuntu-xfce
+    container_name: vulncorp03-webtop
+    hostname: attacker-workstation
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Santiago
+      - TITLE=VulnCorp Lab 03 — Red Team Workstation
+    ports:
+      - "6080:3000"   # HTTP
+      - "6081:3001"   # HTTPS
+    shm_size: "2gb"
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - webtop_config:/config
+      # Extensión de Chrome disponible dentro del escritorio
+      - ./chrome-extension:/config/ext:ro
+      # Scripts de auto-configuración del escritorio
+      - ./novnc/custom-cont-init.d:/custom-cont-init.d:ro
+      # Carpeta compartida para evidencias exfiltradas
+      - ./data/exfiltracion:/config/Desktop/exfiltracion
+    restart: unless-stopped
+    networks:
+      - red-gestion
+      - red-victima
+    labels:
+      vulncorp.lab: "03"
+      vulncorp.role: "attacker-workstation-novnc"
+
+# =============================================================================
+#  REDES — Segmentación estilo empresa (como en el Lab 01)
+# =============================================================================
+networks:
+  # Red de gestión: Dependency-Track + Orchestrator + estación de trabajo
+  red-gestion:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+  # Red de la víctima: PetaShop Inventory (aislada, solo la estación la ve)
+  red-victima:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
+
+# =============================================================================
+#  VOLÚMENES
+# =============================================================================
+volumes:
+  dtrack_data:
+    driver: local
+  # Nombre explícito (sin prefijo de proyecto) para que el Orchestrator pueda
+  # referenciarlo también en `docker run` al invocar syft/grype.
+  scan_data:
+    driver: local
+    name: vulncorp03_scan_data
+  webtop_config:
+    driver: local

@@ -1,0 +1,23 @@
+Notas de reunion — Comite de Operaciones (borrador sin enviar)
+
+Fecha: 09/03/2026
+
+Asistentes: rcarrasco (ops), mgomez (TI), lfuentes (bodega)
+
+Temas:
+1) El sistema de inventario sigue con el software desactualizado.
+   TI envio 3 correos pidiendo presupuesto para actualizarlo y
+   direccion respondio que "no hay plata este trimestre".
+
+2) LFuentes reporto que a veces la pagina de inventario "se cae"
+   y que igual "hace cosas raras con los archivos que se suben".
+   mgomez dijo que hay una vulnerabilidad de ejecucion de comandos
+   confirmada por el equipo de seguridad y que pidió presupuesto
+   para corregirla. Quedo pendiente.
+
+3) Se quedo con la tarea: enviar la matriz de riesgos a direccion
+   (por tercera vez). La otra vez nadie respondio.
+
+"Nota mental: si alguien entra a la bodega por esa falla, no se
+ queda en nadie la responsabilidad, porque todos sabemos que esto
+ esta asi."

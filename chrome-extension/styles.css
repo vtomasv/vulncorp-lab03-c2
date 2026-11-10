@@ -1,0 +1,205 @@
+/* VulnCorp Orchestrator — estilos del panel flotante */
+
+#vulncorp-panel {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 360px;
+  max-height: 70vh;
+  background: #10151f;
+  color: #e6e9ef;
+  border: 1px solid #2a3547;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  z-index: 2147483647;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#vulncorp-panel .vc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(90deg, #16202f, #1b2a44);
+  cursor: default;
+}
+
+#vulncorp-panel .vc-title {
+  font-weight: 700;
+  flex: 1;
+}
+
+#vulncorp-panel .vc-badge {
+  background: #e05252;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+#vulncorp-panel .vc-min {
+  background: transparent;
+  border: 1px solid #3a4a63;
+  color: #cfd8e6;
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+#vulncorp-panel .vc-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+#vulncorp-panel.vc-collapsed .vc-body {
+  display: none;
+}
+
+#vulncorp-panel .vc-status {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #1a2230;
+  color: #9fb0c7;
+}
+
+#vulncorp-panel .vc-status-ok {
+  color: #7ddc9a;
+}
+
+#vulncorp-panel .vc-status-bad {
+  color: #ff8484;
+}
+
+#vulncorp-panel .vc-btn {
+  border: 1px solid #33445f;
+  background: #1c2739;
+  color: #e6e9ef;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+}
+
+#vulncorp-panel .vc-btn:hover {
+  background: #24324a;
+}
+
+#vulncorp-panel .vc-btn-primary {
+  background: #2f6feb;
+  border-color: #2f6feb;
+  font-weight: 600;
+}
+
+#vulncorp-panel .vc-btn-primary:hover {
+  background: #4a83f0;
+}
+
+#vulncorp-panel .vc-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+#vulncorp-panel .vc-btn-small {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+#vulncorp-panel .vc-config {
+  display: flex;
+  gap: 6px;
+}
+
+#vulncorp-panel .vc-input {
+  flex: 1;
+  background: #0d121b;
+  border: 1px solid #33445f;
+  color: #e6e9ef;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+#vulncorp-panel .vc-log {
+  display: none;
+  background: #0a0e15;
+  border: 1px solid #222d3f;
+  border-radius: 8px;
+  padding: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+#vulncorp-panel .vc-logline {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #aebacb;
+}
+
+#vulncorp-panel .vc-logline.vc-warn { color: #ffcf6b; font-weight: 600; }
+#vulncorp-panel .vc-logline.vc-ok   { color: #7ddc9a; }
+#vulncorp-panel .vc-logline.vc-err  { color: #ff8484; }
+
+#vulncorp-panel .vc-alerts-title {
+  font-weight: 700;
+  color: #ffcf6b;
+}
+
+#vulncorp-panel .vc-alert-card {
+  background: #1d1a22;
+  border: 1px solid #4a3b52;
+  border-left: 4px solid #e05252;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#vulncorp-panel .vc-alert-head {
+  font-weight: 700;
+  color: #ff9c9c;
+}
+
+#vulncorp-panel .vc-alert-meta {
+  font-size: 11px;
+  color: #9fb0c7;
+  font-family: ui-monospace, monospace;
+}
+
+#vulncorp-panel .vc-alert-desc,
+#vulncorp-panel .vc-alert-risk,
+#vulncorp-panel .vc-alert-action {
+  font-size: 12px;
+  color: #cfd8e6;
+}
+
+#vulncorp-panel .vc-alert-action {
+  color: #ffcf6b;
+  font-weight: 600;
+}
+
+#vulncorp-panel .vc-epss-badge {
+  background: rgba(229, 72, 34, 0.18);
+  border: 1px solid #e54822;
+  border-radius: 6px;
+  color: #ff9d7a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 8px;
+  letter-spacing: 0.02em;
+}

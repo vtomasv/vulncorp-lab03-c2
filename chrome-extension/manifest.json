@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "VulnCorp Orchestrator — Lab 03",
+  "version": "3.0.0",
+  "description": "Panel flotante para el Lab 03 (MAR303): lanza el escaneo Syft + Grype y sube los SBOMs a Dependency-Track con un click. Solapa la interfaz de Dependency-Track.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "http://localhost:8086/*",
+    "http://127.0.0.1:8086/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:8083/*",
+        "http://127.0.0.1:8083/*",
+        "http://localhost:8084/*",
+        "http://127.0.0.1:8084/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "VulnCorp Orchestrator"
+  }
+}

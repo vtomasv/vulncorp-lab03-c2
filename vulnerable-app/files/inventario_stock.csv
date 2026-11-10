@@ -1,0 +1,13 @@
+Registro de stock semanal — Bodega Central PetaShop
+Semana 10 de 2026
+
+SKU,Producto,Bodega,Cantidad,Minimo
+PS-0001,Alimento perro adulto 15kg,CENTRAL,242,80
+PS-0002,Alimento gato kitten 7kg,CENTRAL,131,40
+PS-0003,Arenera auto limpieza XL,CENTRAL,55,20
+PS-0004,Jugueta cuerda doble,CENTRAL,312,100
+PS-0005,Antiparasitario triple prevented.,CENTRAL,88,30
+PS-0006,Colchon ortopedico tam. M,CENTRAL,17,25
+PS-0007,Shampoo avena 500ml,CENTRAL,204,60
+
+NOTA: SKU PS-0006 bajo stock minimo. Reponer con urgencia.

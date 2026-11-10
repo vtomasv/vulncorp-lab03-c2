@@ -1,0 +1,45 @@
+====================================================================
+ PETASHOP S.A. — SISTEMA DE INVENTARIO DE BODEGA
+ Documento interno — SOLO PERSONAL AUTORIZADO
+====================================================================
+
+Fecha de creacion : 2026-03-14
+Sistema           : PetShop Inventory v3.0.0 (servidor de inventario)
+Responsable TI    : Dpto. Operaciones — ext. 4402
+
+--------------------------------------------------------------------
+ CREDENCIALES DE ACCESO A LA BODEGA CENTRAL
+--------------------------------------------------------------------
+
+Portal de inventario :
+    url      : http://inventario.petashop.local/
+    usuario  : bodega.central
+    clave    : P3taSh0p-B0d3g4-2026!
+
+SCP transferencias nocturnas :
+    usuario  : transfer_scp
+    clave    : Tr4nsf3r#N0cturn0-77
+
+Base de datos de stock :
+    host     : db-bodega.petashop.local
+    usuario  : stock_reader
+    clave    : St0ckR3ad3r$2026
+
+--------------------------------------------------------------------
+ NOTA DEL ADMINISTRADOR
+--------------------------------------------------------------------
+"Estos accesos se guardan aqui porque el ticket de TI #2231 sigue
+ pendiente y hay que dejar la bodega funcionando. Recordar moverlo
+ al gestor de contrasenas cuando lo aprueben."
+                                    -- rcarrasco, 14/03
+
+--------------------------------------------------------------------
+ TOKEN DE VERIFICACION DEL EJERCICIO (entregar al instructor)
+--------------------------------------------------------------------
+
+VULNCORP{EXF1LTR4C10N_C2_M3DUS4_M4R303}
+
+====================================================================
+ FIN DEL DOCUMENTO — Si usted no es el responsable de bodega,
+ no debio poder leer este archivo. Reposte el incidente a TI.
+====================================================================

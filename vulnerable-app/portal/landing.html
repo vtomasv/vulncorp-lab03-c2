@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PetaShop Inventory — Sistema de Inventario de Bodega</title>
+<style>
+  :root {
+    --verde: #1f7a4d;
+    --verde-osc: #145234;
+    --crema: #f7f5ef;
+    --tinta: #22302a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+    background: var(--crema);
+    color: var(--tinta);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: linear-gradient(120deg, var(--verde-osc), var(--verde));
+    color: #fff;
+    padding: 28px 8%;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  header .logo { font-size: 44px; }
+  header h1 { font-size: 22px; font-weight: 700; }
+  header p { opacity: .85; font-size: 13px; margin-top: 4px; }
+  main { flex: 1; padding: 36px 8%; max-width: 1080px; }
+  .estado {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #e2f2e8; color: var(--verde-osc);
+    border: 1px solid #b7dcc4; border-radius: 999px;
+    padding: 6px 14px; font-size: 13px; font-weight: 600;
+    margin-bottom: 28px;
+  }
+  .estado::before { content: "●"; color: #2eaa5e; }
+  h2 { font-size: 18px; margin-bottom: 14px; color: var(--verde-osc); }
+  .modulos { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+  .modulo {
+    background: #fff; border: 1px solid #e3e0d6; border-radius: 14px;
+    padding: 22px; box-shadow: 0 2px 10px rgba(34,48,42,.06);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .modulo .icono { font-size: 30px; }
+  .modulo h3 { font-size: 16px; }
+  .modulo p { font-size: 13.5px; color: #5a6660; }
+
+  /* ---------- Formularios corporativos ---------- */
+  .form-petashop {
+    display: flex; flex-direction: column; gap: 10px;
+    background: #f4f8f5; border: 1px solid #d7e6dc;
+    border-radius: 10px; padding: 14px;
+  }
+  .form-petashop label {
+    font-size: 12.5px; font-weight: 700; color: var(--verde-osc);
+    letter-spacing: .02em;
+  }
+  .form-petashop .campo-file {
+    font-size: 12.5px; color: #5a6660;
+    border: 1.5px dashed #b7dcc4; border-radius: 8px;
+    padding: 10px; background: #fff;
+  }
+  .form-petashop input[type="text"] {
+    font: inherit; font-size: 13.5px;
+    padding: 9px 12px; border: 1px solid #c3d4c9; border-radius: 8px;
+    background: #fff; color: var(--tinta); width: 100%;
+  }
+  .form-petashop input[type="text"]:focus {
+    outline: 2px solid var(--verde); outline-offset: 1px; border-color: var(--verde);
+  }
+  .btn-petashop {
+    align-self: flex-start; cursor: pointer; border: 0; text-decoration: none;
+    color: #fff; background: var(--verde); padding: 9px 16px; border-radius: 9px;
+    font-size: 13.5px; font-weight: 600; font-family: inherit;
+  }
+  .btn-petashop:hover { background: var(--verde-osc); }
+  .btn-petashop:disabled { opacity: .55; cursor: wait; }
+  .salida {
+    display: none;
+    font-family: ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: 12px; line-height: 1.5;
+    background: #10231a; color: #9fe8bd;
+    border-radius: 8px; padding: 12px;
+    white-space: pre-wrap; word-break: break-word;
+    max-height: 220px; overflow: auto;
+  }
+  .salida.error { color: #ffb3a7; }
+  .salida.visible { display: block; }
+  footer {
+    padding: 18px 8%; font-size: 12px; color: #8a938d;
+    border-top: 1px solid #e3e0d6;
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  footer code { background: #eee9dc; padding: 1px 6px; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🐾</div>
+  <div>
+    <h1>PetaShop Inventory <span style="opacity:.7;font-weight:400">v3.0.0</span></h1>
+    <p>Sistema de Inventario de Bodega — uso interno exclusivo</p>
+  </div>
+</header>
+
+<main>
+  <div class="estado">Servicio operativo · Bodega Central en línea</div>
+
+  <h2>Módulos de operación</h2>
+  <div class="modulos">
+
+    <!-- ============ Módulo: Diagnóstico de red ============ -->
+    <div class="modulo">
+      <div class="icono">📡</div>
+      <h3>Diagnóstico de Red</h3>
+      <p>Verifica la conectividad con los servidores de bodega y sucursales.
+         El sistema lanza una prueba <em>ping</em> contra el host indicado.</p>
+
+      <form class="form-petashop" id="form-ping">
+        <label for="ping-host">Probar conexión a servidor de bodega</label>
+        <input type="text" id="ping-host" name="ipaddress"
+               placeholder="ej. 10.0.4.21 o bodega-central" autocomplete="off" required>
+        <button type="submit" class="btn-petashop" id="ping-btn">Probar conexión</button>
+      </form>
+
+      <pre class="salida" id="ping-out"></pre>
+    </div>
+
+    <!-- ============ Módulo: Carga de inventario ============ -->
+    <div class="modulo">
+      <div class="icono">📦</div>
+      <h3>Carga de Archivos de Stock</h3>
+      <p>Sube la planilla de inventario (Excel/CSV) para actualizar
+         el stock de la bodega central.</p>
+
+      <form class="form-petashop" id="form-upload">
+        <label for="upload-file">Subir excel de inventario</label>
+        <input class="campo-file" type="file" id="upload-file" name="file" required>
+        <button type="submit" class="btn-petashop" id="upload-btn">Subir archivo</button>
+      </form>
+
+      <pre class="salida" id="upload-out"></pre>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div>PetaShop S.A. — Dpto. Operaciones · ext. 4402</div>
+  <div>Acceso no autorizado será reportado a TI</div>
+</footer>
+
+<script>
+/* =====================================================================
+   PetaShop Inventory — lógica de los formularios del portal.
+   Ambos formularios consumen los endpoints ya existentes del backend
+   (no se agregó ningún backend nuevo).
+
+   El parámetro "ipaddress" viaja sin sanear hacia el módulo de
+   diagnóstico, y el archivo se guarda con su nombre original en el
+   directorio de uploads. Reporta cualquier comportamiento anómalo a TI.
+   ===================================================================== */
+
+function mostrarSalida(el, texto, esError) {
+  el.textContent = texto;
+  el.classList.add("visible");
+  el.classList.toggle("error", !!esError);
+}
+
+/* -------- Formulario: Probar conexión a servidor de bodega -------- */
+document.getElementById("form-ping").addEventListener("submit", async function (ev) {
+  ev.preventDefault();
+  var host = document.getElementById("ping-host").value.trim();
+  var btn = document.getElementById("ping-btn");
+  var out = document.getElementById("ping-out");
+  if (!host) { mostrarSalida(out, "[!] Indica un host o dirección IP.", true); return; }
+
+  btn.disabled = true;
+  btn.textContent = "Probando…";
+  mostrarSalida(out, "Consultando el servidor de bodega " + host + " …");
+
+  try {
+    var resp = await fetch("/VulnerableApp/CommandInjection/LEVEL_1?ipaddress=" + encodeURIComponent(host));
+    var data = await resp.json();
+    mostrarSalida(out, data.content || JSON.stringify(data, null, 2));
+  } catch (e) {
+    mostrarSalida(out, "[!] Error al contactar el módulo de diagnóstico: " + e, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Probar conexión";
+  }
+});
+
+/* -------- Formulario: Subir excel de inventario -------- */
+document.getElementById("form-upload").addEventListener("submit", async function (ev) {
+  ev.preventDefault();
+  var input = document.getElementById("upload-file");
+  var btn = document.getElementById("upload-btn");
+  var out = document.getElementById("upload-out");
+  if (!input.files.length) { mostrarSalida(out, "[!] Selecciona una planilla para subir.", true); return; }
+
+  btn.disabled = true;
+  btn.textContent = "Subiendo…";
+  mostrarSalida(out, "Subiendo \"" + input.files[0].name + "\" al repositorio de stock…");
+
+  try {
+    var fd = new FormData();
+    fd.append("file", input.files[0]);       // el backend espera el campo "file"
+    var resp = await fetch("/VulnerableApp/UnrestrictedFileUpload/LEVEL_1", { method: "POST", body: fd });
+    var data = await resp.json();
+    if (data.isValid) {
+      mostrarSalida(out, "✅ Planilla recibida.\nGuardada en: " + data.content);
+    } else {
+      mostrarSalida(out, "[!] El servidor rechazó el archivo: " + JSON.stringify(data), true);
+    }
+  } catch (e) {
+    mostrarSalida(out, "[!] Error al subir el archivo: " + e, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Subir archivo";
+  }
+});
+</script>
+
+</body>
+</html>
