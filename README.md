@@ -30,6 +30,20 @@ Trabajo en **equipos de 5 personas** con roles especializados
 > exclusivamente educativo, en red local aislada. No exponer a Internet.
 > **No escanear ni atacar nada fuera de `localhost`.**
 
+## Vistas del laboratorio
+
+**Explotación desde el portal corporativo** — el equipo descubre la inyección
+de comandos en el formulario de diagnóstico de PetaShop Inventory
+(`uid=1000(ubuntu)` y el botín `credenciales_bodega.txt` a la vista):
+
+![Explotación de Command Injection desde el portal de PetaShop Inventory](docs/screenshots/screenshot-01-petashop-exploit.png)
+
+**Priorización con EPSS en Dependency-Track** — el tab *Exploit Predictions*
+muestra los 2 bugs de PetaShop arriba de todo (EPSS 99.999 % y 86.8 %,
+percentil ~100) frente a las 45 vulnerabilidades de librerías:
+
+![Exploit Predictions en Dependency-Track con EPSS](docs/screenshots/screenshot-02-dtrack-epss.png)
+
 ---
 
 ## Arquitectura
