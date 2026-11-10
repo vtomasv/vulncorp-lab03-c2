@@ -15,3 +15,6 @@ Thumbs.db
 
 # Entorno local
 .env
+
+# Guía del instructor — LOCAL ONLY (los alumnos no deben verla)
+docs/LAB_03_INSTRUCTOR.md
