@@ -352,6 +352,7 @@ docker compose logs -f dtrack-apiserver   # logs de Dependency-Track
 
 | Problema | Solución |
 |----------|----------|
+| `exec /opt/portal/start.sh: no such file or directory` al levantar la víctima | Clonaste el repo antes del fix de fines de línea. Trae el fix: `git pull` y vuelve a levantar (`docker compose up -d --build`). Si persiste, re-clona: el repo fuerza LF en los `.sh` desde el commit con `.gitattributes` |
 | Dentro del noVNC, `localhost:8083` (u otro puerto) "refused to connect" | El contenedor webtop está arrancando (socat instala y levanta los forwards al inicio). Espera 1 min y recarga; si persiste: `docker compose restart webtop` y revisa `docker exec vulncorp03-webtop cat /var/log/vulncorp/socat-8083.log` |
 | El panel del plugin no aparece en DTrack | Recarga la página; verifica `chrome://extensions` que la extensión esté activa |
 | "❌ Orchestrator no disponible" | Espera más, luego: `docker compose logs orchestrator` |

@@ -1,0 +1,14 @@
+# Normalizar fines de línea — CRÍTICO para este lab:
+# los scripts bash (start.sh, custom-cont-init.d) se ejecutan dentro de
+# contenedores Linux, donde un CRLF de Windows rompe el shebang
+# ("exec /opt/portal/start.sh: no such file or directory").
+* text=auto eol=lf
+
+# Windows: estos sí deben ser CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+# Binarios
+*.png binary
+*.jpg binary
+*.zip binary

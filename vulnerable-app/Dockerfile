@@ -39,7 +39,11 @@ RUN chmod 644 /opt/petashop/*
 # Portal corporativo + script de arranque
 COPY portal/ /opt/portal/
 COPY start.sh /opt/portal/start.sh
-RUN chmod +x /opt/portal/start.sh && chmod 644 /opt/portal/landing.html
+# Normalizar fines de línea: si el repo se clonó en Windows con
+# autocrlf, el shebang llega con \r y el exec falla con
+# "no such file or directory". El sed lo deja siempre LF.
+RUN sed -i 's/\r$//' /opt/portal/start.sh /opt/portal/proxy.py && \
+    chmod +x /opt/portal/start.sh && chmod 644 /opt/portal/landing.html
 
 USER 1000
 
