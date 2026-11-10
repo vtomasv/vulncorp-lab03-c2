@@ -188,6 +188,11 @@ services:
       - ./novnc/custom-cont-init.d:/custom-cont-init.d:ro
       # Carpeta compartida para evidencias exfiltradas
       - ./data/exfiltracion:/config/Desktop/exfiltracion
+    depends_on:
+      # Normaliza los fines de línea de los scripts de init antes de arrancar
+      # (un clon de Windows llega con CRLF y el shebang falla en el contenedor)
+      webtop-init:
+        condition: service_completed_successfully
     restart: unless-stopped
     networks:
       - red-gestion
@@ -195,6 +200,28 @@ services:
     labels:
       vulncorp.lab: "03"
       vulncorp.role: "attacker-workstation-novnc"
+
+  # ---------------------------------------------------------------------
+  #  ONE-SHOT: corrige CRLF de Windows en los scripts de init del webtop.
+  #  Se copian (ya normalizados a LF) a un volumen que el webtop monta en
+  #  /custom-cont-init.d. Así funcionan tanto los clones nuevos como los
+  #  ANTIGUOS de Windows, sin que el alumno tenga que re-clonar.
+  # ---------------------------------------------------------------------
+  webtop-init:
+    image: alpine:3.20
+    container_name: vulncorp03-webtop-init
+    volumes:
+      - ./novnc/custom-cont-init.d:/src:ro
+      - webtop_init:/out
+    command: >-
+      sh -c 'find /out -mindepth 1 -delete 2>/dev/null || true;
+      for f in /src/*.sh; do
+      out="/out/$${f##*/}";
+      sed "s/\r$$//" "$$f" > "$$out";
+      chmod +x "$$out";
+      echo "[webtop-init] normalizado: $${f##*/}";
+      done'
+    restart: "no"
 
 # =============================================================================
 #  REDES — Segmentación estilo empresa (como en el Lab 01)
@@ -225,4 +252,7 @@ volumes:
     driver: local
     name: vulncorp03_scan_data
   webtop_config:
+    driver: local
+  # Scripts de init del webtop ya normalizados a LF (los escribe webtop-init)
+  webtop_init:
     driver: local

@@ -353,7 +353,7 @@ docker compose logs -f dtrack-apiserver   # logs de Dependency-Track
 | Problema | Solución |
 |----------|----------|
 | `exec /opt/portal/start.sh: no such file or directory` al levantar la víctima | Clonaste el repo antes del fix de fines de línea. Trae el fix: `git pull` y vuelve a levantar (`docker compose up -d --build`). Si persiste, re-clona: el repo fuerza LF en los `.sh` desde el commit con `.gitattributes` |
-| Dentro del noVNC, `localhost:8083` (u otro puerto) "refused to connect" | El contenedor webtop está arrancando (socat instala y levanta los forwards al inicio). Espera 1 min y recarga; si persiste: `docker compose restart webtop` y revisa `docker exec vulncorp03-webtop cat /var/log/vulncorp/socat-8083.log` |
+| En el noVNC no aparecen los accesos directos del Escritorio y/o `localhost:8083`/`localhost:9090` "refused to connect" (típico en clones de Windows) | Misma causa CRLF: los scripts de configuración del escritorio llegan con `\r`. Trae el fix: `git pull` y luego `docker compose up -d --force-recreate webtop` (un servicio `webtop-init` normaliza los scripts automáticamente antes de arrancar). Si persiste: re-clona |
 | El panel del plugin no aparece en DTrack | Recarga la página; verifica `chrome://extensions` que la extensión esté activa |
 | "❌ Orchestrator no disponible" | Espera más, luego: `docker compose logs orchestrator` |
 | El escaneo falla al subir el SBOM | Revisa la API Key en ⚙️ del panel; debe ser de un **equipo** (Administrations → Teams → API Keys) |
