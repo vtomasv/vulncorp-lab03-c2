@@ -1,0 +1,33 @@
+fecha,tipo,categoria,descripcion,documento,monto_clp,saldo_clp
+2026-10-01,saldo_inicial,apertura,Saldo inicial de caja - cierre octubre,,0,18745000
+2026-10-02,ingreso,ventas_online,Venta portal web - pedidos #48210 al #48355,BOLETA-90211,2340890,21085890
+2026-10-02,ingreso,convenios,Convenio Veterinaria Anfitrionas Ltda - pedido mensual,FCT-11802,4120000,25205890
+2026-10-03,egreso,proveedores,Compra stock alimento gato FelinaSur (30 dias),FCT-88410,-6850000,18355890
+2026-10-05,egreso,servicios,Cuenta electricidad Bodega Central - sept,FACT-33901,-842300,17513590
+2026-10-07,ingreso,ventas_tienda,Venta tienda fisica semana 40,BOLETA-90544,1785420,19299010
+2026-10-09,egreso,sueldos,Remuneraciones parcial operacion bodega (segunda quincena sep),LIQ-0926,-5940000,13359010
+2026-10-10,ingreso,marketplace,Liquidacion venta marketplace premium - sem 39,LIQ-MP-4419,996300,14355310
+2026-10-12,egreso,logistica,Transporte despachos region metropolitana (quincena),FCT-77219,-1230000,13125310
+2026-10-14,ingreso,convenios,Fundacion Refugio Patitas - donacion programada,FCT-11877,750000,13875310
+2026-10-15,egreso,arriendo,Arriendo bodega central - octubre,FACT-20114,-3900000,9975310
+2026-10-16,ingreso,ventas_online,Venta portal web - pedidos #48401 al #48610,BOLETA-91002,3102470,13077780
+2026-10-18,egreso,mantenimiento,Reparacion montacargas bodega 2,FACT-45109,-678900,12398880
+2026-10-20,ingreso,ventas_tienda,Venta tienda fisica semana 42,BOLETA-91388,2010850,14409730
+2026-10-21,egreso,impuestos,PPM octubre,FORM-29,-1420000,12989730
+2026-10-23,ingreso,marketplace,Liquidacion venta marketplace premium - sem 41,LIQ-MP-4463,1145800,14135530
+2026-10-24,egreso,proveedores,Reposicion accesorios juguetes CiaPetShop SpA,FCT-88990,-2340000,11795530
+2026-10-27,egreso,logistica,Transporte despachos region metropolitana (quincena),FCT-77450,-1198000,10597530
+2026-10-28,ingreso,convenios,Club de Mascotas del Sur - pedido trimestral,FCT-11912,5640000,16237530
+2026-10-29,egreso,servicios,Internet y telefonia sucursales (oct),FACT-34055,-388900,15848630
+2026-10-30,ingreso,ventas_online,Venta portal web - pedidos #48720 al #48905,BOLETA-91844,2730150,18578780
+2026-10-31,egreso,sueldos,Remuneraciones parcial operacion bodega (primera quincena oct),LIQ-1026,-5980000,12598780
+2026-11-02,ingreso,ventas_tienda,Venta tienda fisica semana 44 (incomplete),BOLETA-92015,1876000,14474780
+2026-11-04,egreso,seguros,Seguro incendiio y robo stock - noviemubre,FACT-55120,-465000,14009780
+2026-11-06,ingreso,ventas_online,Venta portal web - pedidos #49001 al #49188,BOLETA-92477,2984700,16994480
+2026-11-09,egreso,proveedores,Adelanto pedido especial arena sanitaria CleanCat,FCT-89401,-1520000,15474480
+# ============================================================
+#  FLUJO DE CAJA — PetaShop S.A. — CONFIENCIAL INTERNO
+#  Simulación para uso educativo (Lab MAR303). Los montos y
+#  contrapartes son ficticios. Cualquier parecido con la
+#  realidad es casualidad.
+# ============================================================

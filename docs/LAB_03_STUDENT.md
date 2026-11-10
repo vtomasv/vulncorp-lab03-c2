@@ -288,27 +288,38 @@ En Mythic aparece un **callback nuevo** con el hostname `petashop-inventory`.
 
 ## Fase 5 — Exfiltración de la evidencia (Rol 4: Exfiltrador)
 
-**Objetivo:** desde la sesión C2, encontrar y descargar el archivo de
-credenciales de bodega que vive en la máquina víctima.
+**Objetivo:** desde la sesión C2, encontrar y descargar los archivos
+sensibles que viven en la máquina víctima:
+
+- `credenciales_bodega.txt` — credenciales de la bodega (con la flag)
+- `flujo_caja_nov2026.csv` — flujo de caja de PetaShop (finanzas)
+- `accesos_bancarios.txt` — RUTs y claves de portales bancarios
+  (Banco Estado y Banco Falabella) que TI dejó "temporalmente" en el
+  servidor de inventario
 
 1. En Mythic, sobre el callback, ejecuta comandos de reconocimiento:
    ```text
    ls /opt/petashop
    cat /opt/petashop/notas_comite_ops.txt
    ```
-2. Localiza el archivo sensible (pista: el comité de operaciones habló de él).
-3. Descárgalo con el comando `download` de Mythic.
-4. Calcula el hash para la cadena de custodia:
+2. Localiza los archivos sensibles (pista: el comité de operaciones habló
+   de ellos, y el auditor interno dejó nota en el de accesos bancarios).
+3. Descárgalos con el comando `download` de Mythic.
+4. Calcula los hashes para la cadena de custodia:
    ```bash
-   sha256sum credenciales_bodega.txt   # o certutil -hashfile en Windows
+   sha256sum credenciales_bodega.txt accesos_bancarios.txt flujo_caja_nov2026.csv
+   # o certutil -hashfile <archivo> SHA256 en Windows
    ```
-5. Guarda una copia en `data/exfiltracion/` (en el noVNC está en el Escritorio,
+5. Guarda copias en `data/exfiltracion/` (en el noVNC está en el Escritorio,
    carpeta `exfiltracion` — aparece sincronizada en la carpeta `data/` del repo).
 
 ### Entregables del Exfiltrador
 
-- [ ] El archivo exfiltrado (con la **flag** `VULNCORP{…}` adentro)
-- [ ] Hash SHA-256 del archivo original y del exfiltrado (deben coincidir)
+- [ ] El archivo de credenciales exfiltrado (con la **flag** `VULNCORP{…}` adentro)
+- [ ] El **flujo de caja** exfiltrado (evidencia de impacto financiero)
+- [ ] El archivo de **accesos bancarios** exfiltrado (evidencia de impacto crítico:
+      cuentas de Banco Estado y Banco Falabella expuestas)
+- [ ] Hashes SHA-256 de los archivos originales y exfiltrados (deben coincidir)
 - [ ] Capturas del `ls`, `cat` y `download` en Mythic
 - [ ] Cadena de custodia: quién lo encontró, quién lo descargó, fecha/hora, hash
 

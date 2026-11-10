@@ -6,15 +6,23 @@
 
 ## Soluciones técnicas
 
-### 1. La FLAG
+### 1. La FLAG y el botín
 
-El archivo de evidencia vive en la máquina víctima:
+Los archivos de evidencia viven en la máquina víctima:
 
 - Ruta: `/opt/petashop/credenciales_bodega.txt`
 - Flag: `VULNCORP{EXF1LTR4C10N_C2_M3DUS4_M4R303}`
 - El archivo `notas_comite_ops.txt` es la pista narrativa (menciona la falla
   de comandos y archivos que se suben, y el requerimiento ignorado).
 - `inventario_stock.csv` es ruido (reconocimiento normal).
+- `flujo_caja_nov2026.csv` — flujo de caja (impacto financiero del incidente;
+  objetivo de exfiltración secundario del Exfiltrador).
+- `accesos_bancarios.txt` — RUTs y claves de portales de Banco Estado y
+  Banco Falabella, todos **ficticios** (formato RUT con DV real para
+  realismo). Es el objetivo crítico de la exfiltración y el gancho del
+  informe final: "un solo archivo sin proteger concentra el acceso a dos
+  bancos". Si un alumno pregunta: los datos son simulados y así lo dice
+  el propio archivo.
 
 Verificar que existe sin explotar nada:
 

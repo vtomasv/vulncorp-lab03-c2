@@ -1,0 +1,64 @@
+=====================================================================
+  PetaShop S.A. — REGISTRO DE ACCESOS BANCARIOS CORPORATIVOS
+  Tesorería — uso interno exclusivo — CONFIDENCIAL
+=====================================================================
+
+AVISO (Tesoría General): este archivo NO debiese estar aquí.
+El Dpto. de TI lo subió al servidor de inventario en la migración
+de julio "temporalmente". Recordar al encargado moverlo a la bóveda.
+
+Todos los usuarios y claves son FICTICIOS (datos de simulación para
+el curso MAR303). Formato: banco | RUT usuario | clave | cuenta
+
+---------------------------------------------------------------------
+[1] BANCO ESTADO — CuentaRUT Tesorería
+    URL portal   : https://portalpessoa.bancoestado.cl (SIMULADO)
+    RUT          : 15.234.567-4
+    Usuario web  : tpetashop
+    Clave        : CuentaLechera2026*
+    Titular      : Marcela Riquelme Soto — Tesorera (ficticio)
+    Tipo         : CuentaRUT persona jurídica asociada
+    Saldo aprox  : CLP 12.540.800
+
+[2] BANCO ESTADO — CuentaRUT Pagos a Proveedores
+    URL portal   : https://portalpessoa.bancoestado.cl (SIMULADO)
+    RUT          : 9.876.543-3
+    Usuario web  : pagos.proveedores
+    Clave        : FelinaSur#77
+    Titular      : Depto. Cuentas por Pagar (ficticio)
+    Tipo         : CuentaRUT operativa
+    Saldo aprox  : CLP 3.211.450
+
+[3] BANCO FALABELLA — Cuenta Corriente Operaciones
+    URL portal   : https://www.bancofalabella.cl (SIMULADO)
+    RUT          : 16.845.232-2
+    Usuario web  : petashop.ops
+    Clave        : BodegaCentral!24
+    Titular      : PetaShop S.A. (ficticio)
+    Tipo         : Cuenta corriente + línea de crédito
+    Saldo aprox  : CLP 41.908.220
+    Linea        : Aprobada hasta CLP 20.000.000
+
+[4] BANCO FALABELLA — CMR Tarjeta Corporativa Gerencia
+    URL portal   : https://www.cmr.cl (SIMULADO)
+    RUT          : 13.902.741-8
+    Usuario web  : gerencia.finanzas
+    Clave        : cmr.Gerencia$88
+    Titular      : Rodrigo Fuentes Mena — Gerente Finanzas (ficticio)
+    Tipo         : Tarjeta de crédito corporativa
+    Cupo         : CLP 8.000.000
+
+[5] TRANSFERENCIAS AUTOMÁTICAS — Token de coordinación de pagos
+    Banco        : BANCO ESTADO
+    RUT          : 15.234.567-4
+    Token SMS    : se recibe en el celular de la Tesorera
+    Coordinador  : cargos.en.cuenta (ficticio)
+    Clave token  : CoordPagos-2026-PS
+
+---------------------------------------------------------------------
+NOTA DEL AUDITOR INTERNO (oct 2026): las claves no rotan desde 2024.
+Riesgo alto: un solo archivo concentra el acceso a ambas cuentas.
+Recomendación: mover a gestor de credenciales + 2FA. Pendiente.
+
+Proceso pendiente en comité de finanzas: ver notas_comite_ops.txt
+=====================================================================
