@@ -40,18 +40,37 @@ if [ "$TOTAL_MEM" -lt 6442450944 ]; then
   echo "   Docker Desktop → Settings → Resources (recomendado: 8 GB)."
 fi
 
-# --- 3. Directorios de datos ---
+# --- 3. Traer la última versión del repo (fixes y mejoras) ---
+if [ -d .git ]; then
+  echo ""
+  echo "🔄 Actualizando el laboratorio a la última versión…"
+  if ! git pull --ff-only; then
+    echo "⚠️  No se pudo actualizar (¿sin conexión o cambios locales?)."
+    echo "   Continuo con la versión actual del código."
+  fi
+fi
+
+# --- 4. Directorios de datos ---
 mkdir -p data/sbom data/grype data/exfiltracion
 
-# --- 4. Construir imágenes propias (víctima + orchestrator) ---
+# --- 5. Construir imágenes propias (víctima + orchestrator) ---
 echo ""
 echo "📦 Construyendo imágenes del laboratorio (primera vez: ~3-5 min)…"
 docker compose build
 
-# --- 5. Levantar el entorno ---
+# --- 6. Levantar el entorno ---
 echo ""
 echo "🚀 Levantando el entorno…"
 docker compose up -d
+
+# --- 7. Recrear el webtop: re-ejecuta sus scripts de init (forwards socat,
+#        accesos directos del Escritorio y extensión de Chrome precargada).
+#        Es lo que hace que el plugin y localhost SIEMPRE queden operativos
+#        dentro del noVNC, también con clones antiguos de Windows (CRLF).
+echo ""
+echo "🖥️  Reconfigurando la estación de trabajo (noVNC)…"
+docker compose up -d --force-recreate webtop || \
+  echo "⚠️  No se pudo recrear el webtop — revisa 'docker compose logs webtop'."
 
 echo ""
 echo "⏳ Esperando que Dependency-Track inicialice (esto tarda 1-3 min)…"

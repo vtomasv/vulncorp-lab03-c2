@@ -33,10 +33,21 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "OK Docker activo: $(docker --version)" -ForegroundColor Green
 
-# --- 2. Directorios de datos ---
+# --- 3. Traer la ultima version del repo (fixes y mejoras) ---
+if (Test-Path .git) {
+    Write-Host ""
+    Write-Host "Actualizando el laboratorio a la ultima version..." -ForegroundColor Yellow
+    git pull --ff-only
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "AVISO: no se pudo actualizar (sin conexion o cambios locales)." -ForegroundColor Yellow
+        Write-Host "  Se continua con la version actual del codigo."
+    }
+}
+
+# --- 4. Directorios de datos ---
 New-Item -ItemType Directory -Force -Path data\sbom, data\grype, data\exfiltracion | Out-Null
 
-# --- 3. Construir imagenes propias ---
+# --- 5. Construir imagenes propias ---
 Write-Host ""
 Write-Host "Empaquetando imagenes del laboratorio (primera vez: 3-5 min)..." -ForegroundColor Yellow
 docker compose build
@@ -45,13 +56,24 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# --- 4. Levantar el entorno ---
+# --- 6. Levantar el entorno ---
 Write-Host ""
 Write-Host "Levantando el entorno..." -ForegroundColor Yellow
 docker compose up -d
 if ($LASTEXITCODE -ne 0) {
     Write-Host "X Error al levantar el entorno." -ForegroundColor Red
     exit 1
+}
+
+# --- 7. Recrear el webtop: re-ejecuta sus scripts de init (forwards socat,
+#        accesos directos del Escritorio y extension de Chrome precargada).
+#        Asi el plugin y localhost SIEMPRE quedan operativos dentro del
+#        noVNC, tambien con clones antiguos de Windows (CRLF).
+Write-Host ""
+Write-Host "Reconfigurando la estacion de trabajo (noVNC)..." -ForegroundColor Yellow
+docker compose up -d --force-recreate webtop
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "AVISO: no se pudo recrear el webtop - revisa: docker compose logs webtop" -ForegroundColor Yellow
 }
 
 Write-Host ""
