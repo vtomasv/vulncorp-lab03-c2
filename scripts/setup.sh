@@ -69,7 +69,7 @@ docker compose up -d
 #        dentro del noVNC, también con clones antiguos de Windows (CRLF).
 echo ""
 echo "🖥️  Reconfigurando la estación de trabajo (noVNC)…"
-docker compose up -d --force-recreate webtop || \
+docker compose up -d --force-recreate webtop-init webtop || \
   echo "⚠️  No se pudo recrear el webtop — revisa 'docker compose logs webtop'."
 
 echo ""

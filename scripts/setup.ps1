@@ -71,7 +71,7 @@ if ($LASTEXITCODE -ne 0) {
 #        noVNC, tambien con clones antiguos de Windows (CRLF).
 Write-Host ""
 Write-Host "Reconfigurando la estacion de trabajo (noVNC)..." -ForegroundColor Yellow
-docker compose up -d --force-recreate webtop
+docker compose up -d --force-recreate webtop-init webtop
 if ($LASTEXITCODE -ne 0) {
     Write-Host "AVISO: no se pudo recrear el webtop - revisa: docker compose logs webtop" -ForegroundColor Yellow
 }

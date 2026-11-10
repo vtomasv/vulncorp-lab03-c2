@@ -184,8 +184,10 @@ services:
       - webtop_config:/config
       # Extensión de Chrome disponible dentro del escritorio
       - ./chrome-extension:/config/ext:ro
-      # Scripts de auto-configuración del escritorio
-      - ./novnc/custom-cont-init.d:/custom-cont-init.d:ro
+      # Scripts de auto-configuración del escritorio (ya normalizados a LF
+      # por el servicio webtop-init — NUNCA montar aquí la carpeta del host:
+      # en Windows llega con CRLF y los scripts dejan de ejecutarse)
+      - webtop_init:/custom-cont-init.d
       # Carpeta compartida para evidencias exfiltradas
       - ./data/exfiltracion:/config/Desktop/exfiltracion
     depends_on:
